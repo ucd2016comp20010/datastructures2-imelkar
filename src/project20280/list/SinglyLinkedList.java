@@ -242,5 +242,8 @@ public class SinglyLinkedList<E> implements List<E> {
         ll.remove(5);
         System.out.println(ll);
 
+        for(Integer el : ll){
+            System.out.println(el);
+        }
     }
 }
