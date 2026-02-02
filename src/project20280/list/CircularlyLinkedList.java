@@ -28,8 +28,8 @@ public class CircularlyLinkedList<E> implements List<E> {
         }
     }
 
-    private final Node<E> tail = null;
-    private final int size = 0;
+    private Node<E> tail = null;
+    private int size = 0;
 
     public CircularlyLinkedList() {
 
@@ -42,8 +42,7 @@ public class CircularlyLinkedList<E> implements List<E> {
 
     @Override
     public E get(int i) {
-        // TODO
-        return null;
+        return getNode(i).getData();
     }
 
     /**
@@ -55,17 +54,64 @@ public class CircularlyLinkedList<E> implements List<E> {
      */
     @Override
     public void add(int i, E e) {
-        // TODO
+        if(i==0){
+            addFirst(e);
+            return;
+        }
+        if(i == size - 1){
+            addLast(e);
+            return;
+        }
+        if(i >= size){
+            throw new IndexOutOfBoundsException();
+        }
+        Node<E> last_node = tail;
+        for(int j=0; j<i; ++j){
+            last_node = last_node.getNext();
+        }
+        Node<E> new_node = new Node<E>(e, last_node.getNext());
+        last_node.setNext(new_node);
+        ++size;
+    }
+
+    private Node<E> getNode(int i){
+        if(isEmpty() || i >= size){
+            throw new IndexOutOfBoundsException();
+        }
+        Node<E> last_node = tail.getNext();
+        for(int j = 0; j<i; ++j){
+            last_node = last_node.getNext();
+            if(last_node == null){
+                throw new IndexOutOfBoundsException();
+            }
+        }
+        return last_node;
     }
 
     @Override
     public E remove(int i) {
-        // TODO
-        return null;
+        if(i == 0){
+            return removeFirst();
+        }
+        if(i == size - 1){
+            return removeLast();
+        }
+        if(i >= size){
+            throw new IndexOutOfBoundsException();
+        }
+        Node<E> node_before = getNode(i-1);
+        Node<E> nodeToRemove = node_before.getNext();
+        E removed = nodeToRemove.getData();
+        node_before.setNext(nodeToRemove.getNext());
+        --size;
+        return removed;
     }
 
     public void rotate() {
-        // TODO
+        if(isEmpty()){
+            return;
+        }
+        tail = tail.getNext();
     }
 
     private class CircularlyLinkedListIterator<E> implements Iterator<E> {
@@ -97,24 +143,52 @@ public class CircularlyLinkedList<E> implements List<E> {
 
     @Override
     public E removeFirst() {
-        // TODO
-        return null;
+        if(isEmpty()){
+            return null;
+        }
+        E removed = tail.getNext().getData();
+        tail.next = tail.getNext().getNext();
+        --size;
+        return removed;
     }
 
     @Override
     public E removeLast() {
-        // TODO
-        return null;
+        if(isEmpty()){
+            return null;
+        }
+        Node<E> before = getNode(size-1);
+        E removed = tail.getData();
+        before.next = before.getNext().getNext();
+        tail = before;
+        --size;
+        return removed;
     }
 
     @Override
     public void addFirst(E e) {
-        // TODO
+        if(isEmpty()){
+            tail = new Node<E>(e, null);
+            tail.next = tail;
+            ++size;
+            return;
+        }
+        tail.next = new Node<E>(e, tail.getNext());
+        ++size;
     }
 
     @Override
     public void addLast(E e) {
-        // TODO
+        if(isEmpty()){
+            tail = new Node<E>(e, null);
+            tail.next = tail;
+            ++size;
+            return;
+        }
+        Node<E> new_node = new Node<E>(e, tail.getNext());
+        tail.next = new_node;
+        tail = new_node;
+        ++size;
     }
 
 
@@ -163,4 +237,24 @@ public class CircularlyLinkedList<E> implements List<E> {
         }
 
     }
+// Used for further testing:
+//    public static void main(String[] args){
+//        SinglyLinkedList<Integer> ll = new SinglyLinkedList<Integer>();
+//        System.out.println("ll " + ll + " isEmpty: " + ll.isEmpty());
+//        //LinkedList<Integer> ll = new LinkedList<Integer>();
+//
+//        ll.addFirst(0);
+//        ll.addFirst(1);
+//        ll.addFirst(2);
+//        ll.addFirst(3);
+//        ll.addFirst(4);
+//        ll.addLast(-1);
+//        //ll.removeLast();
+//        //ll.removeFirst();
+//        //System.out.println("I accept your apology");
+//        //ll.add(3, 2);
+//        System.out.println(ll);
+//        ll.remove(5);
+//        System.out.println(ll);
+//    }
 }
