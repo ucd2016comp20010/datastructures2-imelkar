@@ -253,42 +253,64 @@ public class SinglyLinkedList<E> implements List<E> {
         return result;
     }
 
-//    public static void main(String[] args) {
-//        SinglyLinkedList<Integer> ll = new SinglyLinkedList<Integer>();
-//        System.out.println("ll " + ll + " isEmpty: " + ll.isEmpty());
-//        //LinkedList<Integer> ll = new LinkedList<Integer>();
-//
-//        ll.addFirst(0);
-//        ll.addFirst(1);
-//        ll.addFirst(2);
-//        ll.addFirst(3);
-//        ll.addFirst(4);
-//        ll.addLast(-1);
-//        //ll.removeLast();
-//        //ll.removeFirst();
-//        //System.out.println("I accept your apology");
-//        //ll.add(3, 2);
-//        System.out.println(ll);
-//        ll.remove(5);
-//        System.out.println(ll);
-//
-//        for(Integer el : ll){
-//            System.out.println(el);
-//        }
-//    }
-    public static void main(String[] args) {
-        final Integer[] l1 = {2, 6, 20, 24};
-        final Integer[] l2 = {1, 3, 5, 8, 12, 19, 25};
-        SinglyLinkedList<Integer> s1 = new SinglyLinkedList<Integer>();
-        SinglyLinkedList<Integer> s2 = new SinglyLinkedList<Integer>();
-
-        for(Integer i: l1){
-            s1.addLast(i);
+    // Q10
+    public void reverse(){
+        if(isEmpty() || size == 1){
+            return;
         }
-        for(Integer i: l2){
-            s2.addLast(i);
+        Node<E> last = head;
+        Node<E> curr = head.next;
+        Node<E> next;
+        last.next = null;
+        for(int i=0; i<size-1; ++i){
+            next = curr.next;
+            curr.next = last;
+            last = curr;
+            curr = next;
         }
-
-        System.out.println(s1.sortedMerge(s1, s2).toString());
+        head = last;
     }
+
+    public static void main(String[] args) {
+        SinglyLinkedList<Integer> ll = new SinglyLinkedList<Integer>();
+        System.out.println("ll " + ll + " isEmpty: " + ll.isEmpty());
+        //LinkedList<Integer> ll = new LinkedList<Integer>();
+
+        ll.addFirst(0);
+        ll.addFirst(1);
+        ll.addFirst(2);
+        ll.addFirst(3);
+        ll.addFirst(4);
+        ll.addLast(-1);
+        //ll.removeLast();
+        //ll.removeFirst();
+        //System.out.println("I accept your apology");
+        //ll.add(3, 2);
+        System.out.println(ll);
+        ll.remove(5);
+        System.out.println(ll);
+
+        for(Integer el : ll){
+            System.out.println(el);
+        }
+
+        ll.reverse();
+
+        System.out.println(ll.toString());
+    }
+//    public static void main(String[] args) {
+//        final Integer[] l1 = {2, 6, 20, 24};
+//        final Integer[] l2 = {1, 3, 5, 8, 12, 19, 25};
+//        SinglyLinkedList<Integer> s1 = new SinglyLinkedList<Integer>();
+//        SinglyLinkedList<Integer> s2 = new SinglyLinkedList<Integer>();
+//
+//        for(Integer i: l1){
+//            s1.addLast(i);
+//        }
+//        for(Integer i: l2){
+//            s2.addLast(i);
+//        }
+//
+//        System.out.println(s1.sortedMerge(s1, s2).toString());
+//    }
 }
