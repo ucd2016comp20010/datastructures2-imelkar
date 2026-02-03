@@ -271,6 +271,17 @@ public class SinglyLinkedList<E> implements List<E> {
         head = last;
     }
 
+    // Q11
+    public SinglyLinkedList<E> clone(){
+        SinglyLinkedList<E> cloned = new SinglyLinkedList<E>();
+        Node<E> curr = head;
+        for(int i=0; i<size; ++i){
+            cloned.addLast(curr.getElement());
+            curr = curr.getNext();
+        }
+        return cloned;
+    }
+
     public static void main(String[] args) {
         SinglyLinkedList<Integer> ll = new SinglyLinkedList<Integer>();
         System.out.println("ll " + ll + " isEmpty: " + ll.isEmpty());
@@ -297,6 +308,13 @@ public class SinglyLinkedList<E> implements List<E> {
         ll.reverse();
 
         System.out.println(ll.toString());
+
+        SinglyLinkedList<Integer> clone = ll.clone();
+        System.out.println(clone);
+        clone.addLast(6);
+        clone.add(3, 11);
+        System.out.println(clone);
+
     }
 //    public static void main(String[] args) {
 //        final Integer[] l1 = {2, 6, 20, 24};
