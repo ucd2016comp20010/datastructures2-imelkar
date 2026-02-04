@@ -1,5 +1,7 @@
 Starting repository for `Data Structures` COMP20280 2025-2026
 
+Wk2:
+
 Q5.
 All the tests run, however the test coverage is poor. The tests do not cover all edge cases and  branches. They also fail to cover sortedMerge, reverse and clone methods (although they are only written later in the assignment).
 
@@ -14,3 +16,46 @@ If there is a need to insert/delete elements into/from the middle of the array, 
 Q8.
 1. Circularly linked lists can be used as queues. To move the queue forward, you only need to rotate the list. 
 2. Circularly linked lists are also useful when managing time-shared processes. They can be used to switch from one process to the next indefinitely, without the need to worry about reaching the end of the array and restarting it.
+
+Wk3:
+
+Q2.
+```
+void enqueue(E e){
+    stack1.addLast(e);
+    size++;
+}
+
+E dequeue(){
+    for(int i=0; i<size-1; ++i){
+        stack2.addLast(stack1.removeLast());
+    }
+    E removed = stack1.removeLast();
+    --size;
+    for(int i=0; i<size; ++i){
+        stack1.addLast(stack2.removeLast());
+    }
+    return removed;
+}
+```
+Q3.
+```
+void reverse(){
+    for(int i=0; i<size; ++i){
+        stack2.addLast(stack1.removeLast());
+    }
+    // stack2 is reversed stack1
+
+    for(int i=0; isize; ++i){
+        stack3.addLast(stack2.removeLast());
+    }
+    // stack3 is as stack1 was (reversed stack2)
+
+   for(int i=0; i<size; ++i){
+        stack1.addLast(stack3.removeLast());
+    }
+    // stack1 is reversed
+}
+
+```
+

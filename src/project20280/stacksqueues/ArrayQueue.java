@@ -2,15 +2,17 @@ package project20280.stacksqueues;
 
 import project20280.interfaces.Queue;
 
+import java.util.Arrays;
+
 public class ArrayQueue<E> implements Queue<E> {
 
     private static final int CAPACITY = 1000;
     private E[] data;
     private final int front = 0;
-    private final int size = 0;
+    private int size = 0;
 
     public ArrayQueue(int capacity) {
-        // TODO
+        data = (E[]) new Object[capacity];
 
     }
 
@@ -29,9 +31,22 @@ public class ArrayQueue<E> implements Queue<E> {
         return size == 0;
     }
 
+    private void resize(){
+        if(data.length == CAPACITY){
+            throw new IndexOutOfBoundsException();
+        }
+        int new_length = size*2+1;
+        if(new_length > CAPACITY){
+            new_length = CAPACITY;
+        }
+        data = Arrays.copyOf(data, new_length);
+    }
     @Override
     public void enqueue(E e) {
-        // TODO
+        if(size >= data.length){
+            resize();
+        }
+        data[size++] = e;
     }
 
     @Override
@@ -41,8 +56,12 @@ public class ArrayQueue<E> implements Queue<E> {
 
     @Override
     public E dequeue() {
-        // TODO
-        return null;
+        E result = data[0];
+        for(int i=1; i<size; ++i){
+            data[i-1]=data[i];
+        }
+        --size;
+        return result;
     }
 
     public String toString() {
