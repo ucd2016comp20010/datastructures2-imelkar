@@ -17,7 +17,7 @@ import java.util.List;
  * more direct and efficient implementation.
  */
 public abstract class AbstractTree<E> implements Tree<E> {
-
+    int recursive_call_count;
     /**
      * Returns true if Position p has one or more children.
      *
@@ -52,8 +52,7 @@ public abstract class AbstractTree<E> implements Tree<E> {
      */
     @Override
     public boolean isRoot(Position<E> p) {
-        // TODO
-        return false;
+        return p == root();
     }
 
     /**
@@ -118,8 +117,19 @@ public abstract class AbstractTree<E> implements Tree<E> {
     }
 
     public int height_recursive(Position<E> p) {
-        // TODO
-        return 0;
+        ++recursive_call_count;
+        int max = 0, temp;
+        Iterable<Position<E>> children = children(p);
+        if(((List<Position<E>>) children).isEmpty()){
+            return 0;
+        }
+        for(Position<E> child: children){
+            temp = height_recursive(child);
+            if(temp > max){
+                max = temp;
+            }
+        }
+        return max+1;
     }
 
     /**
@@ -129,7 +139,10 @@ public abstract class AbstractTree<E> implements Tree<E> {
      * @throws IllegalArgumentException if p is not a valid Position for this tree.
      */
     public int height() throws IllegalArgumentException {
-        return height_recursive(root());
+        recursive_call_count = 0;
+        int result = height_recursive(root());
+        System.out.println("Recursive call count: " + recursive_call_count);
+        return result;
     }
 
     //---------- support for various iterations of a tree ----------
@@ -180,7 +193,13 @@ public abstract class AbstractTree<E> implements Tree<E> {
      * @param snapshot a list to which results are appended
      */
     private void preorderSubtree(Position<E> p, List<Position<E>> snapshot) {
-        // TODO
+        if(p == null){
+            return;
+        }
+        Iterable<Position<E>> children = children(p);
+        preorderSubtree(children.iterator().next(), snapshot);
+        snapshot.addLast(p);
+        preorderSubtree(children.iterator().next(), snapshot);
     }
 
     /**
@@ -189,8 +208,9 @@ public abstract class AbstractTree<E> implements Tree<E> {
      * @return iterable collection of the tree's positions in preorder
      */
     public Iterable<Position<E>> preorder() {
-        // TODO
-        return null;
+        List<Position<E>> result = (List<Position<E>>) iterator();
+        preorderSubtree(root(), result);
+        return result;
     }
 
     /**
