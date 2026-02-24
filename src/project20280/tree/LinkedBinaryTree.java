@@ -5,6 +5,8 @@ import project20280.interfaces.Position;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import static java.lang.Math.max;
 //import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 /**
@@ -24,6 +26,8 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      * The number of nodes in the binary tree
      */
     private int size = 0; // number of nodes in the tree
+
+    private int diameter = 0;
 
     /**
      * Constructs an empty binary tree.
@@ -74,20 +78,44 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 //        System.out.println(bt2.toBinaryTreeString());
 //        System.out.println(bt2.height());
 
-        // Q2 Wk5
-//        LinkedBinaryTree <String > bt3 = new LinkedBinaryTree <>();
-//        String [] arr3 = { "A", "B", "C", "D", "E", null , "F", null , null , "G", "H", null , null , null , null};
+        // Q1(i) Wk4
+//        Integer[] arr3 = new Integer [] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+//                23, 24, 25, 26, 27, 28, 29, 30, 31, null, null, null, 35};
+//        LinkedBinaryTree <Integer> bt3 = new LinkedBinaryTree <>();
 //        bt3.createLevelOrder(arr3);
-//        System.out.println(bt3.toBinaryTreeString ());
+//        System.out.println(bt3.toBinaryTreeString());
+//        System.out.println("Diameter: " + bt3.getDiameter());
+
+        // Q2 Wk5
+//        LinkedBinaryTree <String > bt4 = new LinkedBinaryTree <>();
+//        String [] arr4 = { "A", "B", "C", "D", "E", null , "F", null , null , "G", "H", null , null , null , null};
+//        bt4.createLevelOrder(arr4);
+//        System.out.println(bt4.toBinaryTreeString ());
 
         // Q3 Wk5
-        Integer [] inorder= {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
-        Integer [] preorder= {18, 2, 1, 14, 13, 12, 4, 3, 9, 6, 5, 8, 7, 10, 11, 15, 16, 17, 28, 23, 19, 22, 20, 21, 24, 27, 26, 25, 29, 30};
-        LinkedBinaryTree <Integer > bt4 = new LinkedBinaryTree <>();
-        bt4.construct(inorder, preorder);
-        System.out.println(bt4.toBinaryTreeString());
+//        Integer [] inorder= {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
+//        Integer [] preorder= {18, 2, 1, 14, 13, 12, 4, 3, 9, 6, 5, 8, 7, 10, 11, 15, 16, 17, 28, 23, 19, 22, 20, 21, 24, 27, 26, 25, 29, 30};
+//        LinkedBinaryTree <Integer > bt5 = new LinkedBinaryTree <>();
+//        bt5.construct(inorder, preorder);
+//        System.out.println(bt5.toBinaryTreeString());
+
+        // Q6 Wk5
+        getAverageTreeHeight(50, 5000, 50);
     }
 
+    public static void getAverageTreeHeight(int start, int end, int step){
+        int heightSum;
+        LinkedBinaryTree<Integer> bt = new LinkedBinaryTree<Integer>();
+        for(int i=start; i<=end; i+=step){
+            heightSum = 0;
+            for(int j=0; j<100; ++j) {
+                bt = makeRandom(i);
+                heightSum += bt.getHeight(bt.root);
+
+            }
+            System.out.println(heightSum/100.0);
+        }
+    }
 
     /**
      * Factory function to create a new node storing element e.
@@ -492,5 +520,30 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 
     public ArrayList<ArrayList<E>> rootToLeafPaths(){
         return nodeToLeafPaths(root);
+    }
+
+    public int getHeight(Node<E> node){
+        if(node == null){
+            return 0;
+        }
+
+        return max(getHeight(node.getRight()), getHeight(node.getLeft())) + 1;
+    }
+
+    private int getDiameterReturnHeight(Node<E> node){
+        if(node == null){
+            return 0;
+        }
+
+        int heightL = getDiameterReturnHeight(node.getLeft());
+        int heightR = getDiameterReturnHeight(node.getRight());
+
+        diameter = max(heightL + heightR, diameter);
+        return max(heightL, heightR) + 1;
+    }
+
+    public int getDiameter(){
+        getDiameterReturnHeight(root);
+        return diameter;
     }
 }

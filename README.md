@@ -59,3 +59,28 @@ void reverse(){
 
 ```
 
+Wk4:
+
+Q2.
+Q3.
+Q4.
+Q5.
+
+Wk5:
+
+Q5.
+```
+global diameter; // the result will be stored in this variable
+
+int getDiameter(node){
+    if(node == null){
+        return 0
+    }
+    height left = getDiameter(node.left)
+    height right = getDiameter(node.right)
+
+    diameter = max(diameter, height left + height right)
+
+    return max(height left, height right) + 1;
+}
+```
