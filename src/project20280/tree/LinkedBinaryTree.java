@@ -87,17 +87,17 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 //        System.out.println("Diameter: " + bt3.getDiameter());
 
         // Q2 Wk5
-//        LinkedBinaryTree <String > bt4 = new LinkedBinaryTree <>();
-//        String [] arr4 = { "A", "B", "C", "D", "E", null , "F", null , null , "G", "H", null , null , null , null};
-//        bt4.createLevelOrder(arr4);
-//        System.out.println(bt4.toBinaryTreeString ());
+        LinkedBinaryTree <String > bt4 = new LinkedBinaryTree <>();
+        String [] arr4 = { "A", "B", "C", "D", "E", null , "F", null , null , "G", "H", null , null , null , null};
+        bt4.createLevelOrder(arr4);
+        System.out.println(bt4.toBinaryTreeString ());
 
         // Q3 Wk5
-//        Integer [] inorder= {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
-//        Integer [] preorder= {18, 2, 1, 14, 13, 12, 4, 3, 9, 6, 5, 8, 7, 10, 11, 15, 16, 17, 28, 23, 19, 22, 20, 21, 24, 27, 26, 25, 29, 30};
-//        LinkedBinaryTree <Integer > bt5 = new LinkedBinaryTree <>();
-//        bt5.construct(inorder, preorder);
-//        System.out.println(bt5.toBinaryTreeString());
+        Integer [] inorder= {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
+        Integer [] preorder= {18, 2, 1, 14, 13, 12, 4, 3, 9, 6, 5, 8, 7, 10, 11, 15, 16, 17, 28, 23, 19, 22, 20, 21, 24, 27, 26, 25, 29, 30};
+        LinkedBinaryTree <Integer > bt5 = new LinkedBinaryTree <>();
+        bt5.construct(inorder, preorder);
+        System.out.println(bt5.toBinaryTreeString());
 
         // Q6 Wk5
         getAverageTreeHeight(50, 5000, 50);
