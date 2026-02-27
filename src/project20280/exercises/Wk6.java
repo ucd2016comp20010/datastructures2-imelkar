@@ -38,6 +38,16 @@ public class Wk6 {
         return Tribonacci(n-3)+Tribonacci(n-2)+Tribonacci(n-1);
     }
 
+    // Q4 - nested recursion
+    public static int function91(int n){
+        if(n > 100){
+            return n-10;
+        }
+        return function91(function91(n+11));
+    }
+
+
+
     public static void main(String[] args){
 //        long start, timeTaken;
 //        long res;
@@ -56,5 +66,7 @@ public class Wk6 {
 //        }
 
         System.out.println(Tribonacci(9));
+
+        System.out.println(function91(87));
     }
 }

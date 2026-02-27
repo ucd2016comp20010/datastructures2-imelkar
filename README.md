@@ -84,3 +84,35 @@ int getDiameter(node){
     return max(height left, height right) + 1;
 }
 ```
+
+Wk6
+
+Q5.
+(a) Prints the given decimal number in binary.
+(b) 10010001101000
+
+Q6.
+
+(a)
+```
+void reverse(list){
+    if(last){
+        end
+    }
+    reverse(list.next);
+    print(list.first);
+}
+```
+
+Q7.
+
+(a)
+```
+LinkedList recursiveCopy(LinkedList original, Node next){
+    if(original is empty){
+        root = next;
+        return root;
+    }
+    recursiveCopy(original.next, new Node(original.first.element, next))
+}
+```

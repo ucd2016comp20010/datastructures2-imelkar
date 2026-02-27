@@ -254,21 +254,51 @@ public class SinglyLinkedList<E> implements List<E> {
     }
 
     // Q10
-    public void reverse(){
-        if(isEmpty() || size == 1){
+//    public void reverse(){
+//        if(isEmpty() || size == 1){
+//            return;
+//        }
+//        Node<E> last = head;
+//        Node<E> curr = head.next;
+//        Node<E> next;
+//        last.next = null;
+//        for(int i=0; i<size-1; ++i){
+//            next = curr.next;
+//            curr.next = last;
+//            last = curr;
+//            curr = next;
+//        }
+//        head = last;
+//    }
+
+    // Wk6 Q6
+    public void reverse() {
+        if(head != null) {
+            head = reverseHelper(null, head);
+        }
+    }
+    private Node<E> reverseHelper(Node<E> curr, Node<E> succ) {
+        Node<E> n = succ.next;
+        succ.next = curr;
+        if(n == null) {
+            return succ;
+        }
+        return reverseHelper(succ, n);
+    }
+
+    // Wk6 Q7
+    public SinglyLinkedList<E> recursiveCopy(){
+        SinglyLinkedList<E> copy = new SinglyLinkedList<E>();
+        recursiveCopyHelper(copy, this.head);
+        return copy;
+    }
+
+    public void recursiveCopyHelper(SinglyLinkedList<E> copy, Node<E> cur){
+        if(cur == null){
             return;
         }
-        Node<E> last = head;
-        Node<E> curr = head.next;
-        Node<E> next;
-        last.next = null;
-        for(int i=0; i<size-1; ++i){
-            next = curr.next;
-            curr.next = last;
-            last = curr;
-            curr = next;
-        }
-        head = last;
+        copy.addLast(cur.getElement());
+        recursiveCopyHelper(copy, cur.getNext());
     }
 
     // Q11
@@ -314,6 +344,8 @@ public class SinglyLinkedList<E> implements List<E> {
         clone.addLast(6);
         clone.add(3, 11);
         System.out.println(clone);
+
+        System.out.println(clone.recursiveCopy());
 
     }
 //    public static void main(String[] args) {
