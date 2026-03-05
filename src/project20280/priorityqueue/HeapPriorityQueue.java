@@ -43,40 +43,49 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      * @param values an array of the initial values for the priority queue
      */
     public HeapPriorityQueue(K[] keys, V[] values) {
-        // TODO
+        super();
+        for(int i=0; i<keys.length && i<values.length; ++i){
+            insert(keys[i], values[i]);
+        }
+
     }
 
     // protected utilities
     protected int parent(int j) {
-        // TODO
-        return 0;
+        return (j-1)/2;
     }
 
     protected int left(int j) {
-        // TODO
-        return 0;
+        int left = 2*j+1;
+        if(left >= size()){
+            return -1;
+        }
+        return left;
     }
 
     protected int right(int j) {
-        // TODO
-        return 0;
+        int right = 2*j+2;
+        if(right >= size()){
+            return -1;
+        }
+        return right;
     }
 
     protected boolean hasLeft(int j) {
-        // TODO
-        return false;
+        return left(j) != -1;
     }
 
     protected boolean hasRight(int j) {
-        // TODO
-        return false;
+        return right(j) != -1;
     }
 
     /**
      * Exchanges the entries at indices i and j of the array list.
      */
     protected void swap(int i, int j) {
-        // TODO
+        Entry<K, V> temp = heap.get(i);
+        heap.set(i, heap.get(j));
+        heap.set(j, temp);
     }
 
     /**
@@ -84,14 +93,34 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      * property.
      */
     protected void upheap(int j) {
-        // TODO
+        int parent = parent(j);
+        if(compare(heap.get(j), heap.get(parent)) < 0){
+            swap(j, parent);
+            upheap(parent);
+        }
     }
 
     /**
      * Moves the entry at index j lower, if necessary, to restore the heap property.
      */
     protected void downheap(int j) {
-        // TODO
+        int child = -1;
+        if(hasLeft(j)){
+            child = left(j);
+        }
+        if(hasRight(j)){
+            int right = right(j);
+            if(right < child){
+                child = right;
+            }
+        }
+        if(child == -1){
+            return;
+        }
+        if(compare(heap.get(j), heap.get(child)) > 0){
+            swap(j, child);
+            downheap(child);
+        }
     }
 
     /**
@@ -120,7 +149,7 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     @Override
     public Entry<K, V> min() {
-        return heap.get(0);
+        return heap.getFirst();
     }
 
     /**
@@ -133,8 +162,10 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     @Override
     public Entry<K, V> insert(K key, V value) throws IllegalArgumentException {
-        // TODO
-        return null;
+        Entry<K, V> new_entry = new PQEntry<K, V>(key, value);
+        heap.addLast(new_entry);
+        upheap(heap.size()-1);
+        return new_entry;
     }
 
     /**
@@ -144,8 +175,40 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     @Override
     public Entry<K, V> removeMin() {
-        // TODO
-        return null;
+        swap(0, heap.size()-1);
+        Entry<K, V> removed = heap.removeLast();
+        downheap(0);
+        return removed;
+    }
+
+    private void preorderTraversalPrintHelper(int j){
+        System.out.print(heap.get(j).getValue() + " ");
+        if(hasLeft(j)){
+            preorderTraversalPrintHelper(left(j));
+        }
+        if(hasRight(j)){
+            preorderTraversalPrintHelper(right(j));
+        }
+    }
+
+    public void preorderTraversalPrint(){
+        preorderTraversalPrintHelper(0);
+        System.out.println();
+    }
+
+    private void postorderTraversalPrintHelper(int j){
+        if(hasLeft(j)){
+            postorderTraversalPrintHelper(left(j));
+        }
+        if(hasRight(j)){
+            postorderTraversalPrintHelper(right(j));
+        }
+        System.out.print(heap.get(j).getValue() + " ");
+    }
+
+    public void postorderTraversalPrint(){
+        postorderTraversalPrintHelper(0);
+        System.out.println();
     }
 
     public String toString() {
@@ -175,19 +238,35 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
     }
 
     public static void main(String[] args) {
-        Integer[] rands = new Integer[]{35, 26, 15, 24, 33, 4, 12, 1, 23, 21, 2, 5};
-        HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>(rands, rands);
+//        Integer[] rands = new Integer[]{35, 26, 15, 24, 33, 4, 12, 1, 23, 21, 2, 5};
+//        HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>(rands, rands);
+//
+//        System.out.println("elements: " + rands);
+//        System.out.println("after adding elements: " + pq);
+//
+//        System.out.println("min element: " + pq.min());
+//
+//        pq.removeMin();
+//        System.out.println("after removeMin: " + pq);
+//        // [             1,
+//        //        2,            4,
+//        //   23,     21,      5, 12,
+//        // 24, 26, 35, 33, 15]
 
-        System.out.println("elements: " + rands);
-        System.out.println("after adding elements: " + pq);
+        // Q1
+        Integer[] arr = {2, 5, 16, 4, 10, 23, 39, 18, 26, 15};
+        HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>();
+        for(Integer i: arr){
+            pq.insert(i, i);
+            System.out.println(pq);
+        }
 
-        System.out.println("min element: " + pq.min());
+        // Q2
+        pq.preorderTraversalPrint();
 
-        pq.removeMin();
-        System.out.println("after removeMin: " + pq);
-        // [             1,
-        //        2,            4,
-        //   23,     21,      5, 12,
-        // 24, 26, 35, 33, 15]
+        // Q3
+        pq.postorderTraversalPrint();
+
+        // Q4 - yes to both
     }
 }
