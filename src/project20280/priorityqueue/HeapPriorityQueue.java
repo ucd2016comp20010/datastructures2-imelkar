@@ -7,6 +7,8 @@ import project20280.interfaces.Entry;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Random;
+import java.util.stream.IntStream;
 
 
 /**
@@ -44,10 +46,15 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     public HeapPriorityQueue(K[] keys, V[] values) {
         super();
-        for(int i=0; i<keys.length && i<values.length; ++i){
-            insert(keys[i], values[i]);
+//        for(int i=0; i<keys.length && i<values.length; ++i){
+//            insert(keys[i], values[i]);
+//        }
+        int kL = keys.length;
+        int vL = values.length;
+        for(int i=0; i<kL && i < vL; ++i){
+            heap.addLast(new PQEntry<K, V>(keys[i], values[i]));
         }
-
+        heapify();
     }
 
     // protected utilities
@@ -110,7 +117,7 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
         }
         if(hasRight(j)){
             int right = right(j);
-            if(right < child){
+            if(compare(heap.get(right), heap.get(child)) < 0){
                 child = right;
             }
         }
@@ -123,11 +130,37 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
         }
     }
 
+    protected void downheap(int j, int end) {
+        if(j >= end){
+            return;
+        }
+        int child = -1;
+        if(hasLeft(j)){
+            child = left(j);
+        }
+        if(hasRight(j)){
+            int right = right(j);
+            if(child == -1 || compare(heap.get(right), heap.get(child)) < 0){
+                child = right;
+            }
+        }
+//        System.out.println("child - " + child + "/" + heap.get(child) + " (parent = " + j + "/" + heap.get(j) + ")");
+        if(child == -1 || child >= end){
+            return;
+        }
+        if(compare(heap.get(j), heap.get(child)) > 0){
+            swap(j, child);
+            downheap(child, end);
+        }
+    }
+
     /**
      * Performs a bottom-up construction of the heap in linear time.
      */
     protected void heapify() {
-        // TODO
+        for(int i=heap.size()-1; i>=0; --i){
+            downheap(i);
+        }
     }
 
     // public methods
@@ -237,6 +270,25 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
         }
     }
 
+    public static <T> void PQsort(T[] arr){
+        HeapPriorityQueue<T, T> pq = new HeapPriorityQueue<>(arr, arr);
+        for(int i=0; i<arr.length; ++i){
+            arr[i] = pq.removeMin().getValue();
+        }
+    }
+
+    public static <T> void heapsort(T[] arr){
+        HeapPriorityQueue<T, T> pq = new HeapPriorityQueue<>(arr, arr);
+        for(int i = pq.heap.size()-1; i > 0; --i){
+            pq.swap(0, i);
+            pq.downheap(0, i);
+        }
+        pq.swap(0, 1);
+        for(int i=0; i<arr.length; ++i){
+            arr[i] = pq.heap.get(i).getValue();
+        }
+    }
+
     public static void main(String[] args) {
 //        Integer[] rands = new Integer[]{35, 26, 15, 24, 33, 4, 12, 1, 23, 21, 2, 5};
 //        HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>(rands, rands);
@@ -254,6 +306,7 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 //        // 24, 26, 35, 33, 15]
 
         // Q1
+        System.out.println("Q1");
         Integer[] arr = {2, 5, 16, 4, 10, 23, 39, 18, 26, 15};
         HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>();
         for(Integer i: arr){
@@ -262,11 +315,54 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
         }
 
         // Q2
+        System.out.println("Q2");
         pq.preorderTraversalPrint();
 
         // Q3
+        System.out.println("Q3");
         pq.postorderTraversalPrint();
 
         // Q4 - yes to both
+
+        // Q5
+        System.out.println("Q5");
+        Integer[] arr5 = {2, 5, 16, 4, 10, 23, 39, 18, 26, 15};
+        HeapPriorityQueue<Integer, Integer> pq5 = new HeapPriorityQueue<>(arr5, arr5);
+        System.out.println(pq5);
+
+        // Q6 - Assumption: O(nlogn)
+        System.out.println("Q6");
+        long start, result;
+        Random rnd = new Random();
+        rnd.setSeed(1024);
+        int n_min = 1000, n_max = 1000000, n_samples = 80;
+        double alpha = ( (Math.log(n_max) / Math.log(n_min)) - 1) / (n_samples-1);
+        for(int i = 0; i < n_samples; ++i) {
+            int n = (int) Math.pow(n_min, (1 + i * alpha));
+            Integer[] arr6 = IntStream.rangeClosed(1, n).boxed().toArray(Integer[]::new);
+            start = System.currentTimeMillis();
+            PQsort(arr6);
+            result = System.currentTimeMillis() - start;
+            System.out.println(i + "\t" + n + "\t" + result + "\t" );
+        }
+
+        // Q7 - O(nlogn)
+        System.out.println("Q7");
+        Integer[] arr7 = {2, 5, 16, 4, 10, 23, 39, 18, 26, 15};
+//        Integer[] arr7 = {35, 26, 15, 24, 33, 4, 12, 1, 23, 21, 2, 5};
+        heapsort(arr7);
+        for(int i: arr7){
+            System.out.print(i + " ");
+        }
+        System.out.println();
+
+        for(int i = 0; i < n_samples; ++i) {
+            int n = (int) Math.pow(n_min, (1 + i * alpha));
+            Integer[] arr6 = IntStream.rangeClosed(1, n).boxed().toArray(Integer[]::new);
+            start = System.currentTimeMillis();
+            heapsort(arr6);
+            result = System.currentTimeMillis() - start;
+            System.out.println(i + "\t" + n + "\t" + result + "\t" );
+        }
     }
 }
