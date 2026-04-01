@@ -52,8 +52,10 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
      */
     @Override
     protected V bucketGet(int h, K k) {
-        // TODO
-        return null;
+        if(h >= table.length || table[h] == null){
+            return null;
+        }
+        return table[h].get(k);
     }
 
     /**
@@ -67,8 +69,13 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
      */
     @Override
     protected V bucketPut(int h, K k, V v) {
-        // TODO
-        return null;
+        if(h >= table.length){
+            return null;
+        }
+        if(table[h] == null){
+            table[h] = new UnsortedTableMap<>();
+        }
+        return table[h].put(k, v);
     }
 
 
@@ -82,8 +89,10 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
      */
     @Override
     protected V bucketRemove(int h, K k) {
-        // TODO
-        return null;
+        if(h >= table.length || table[h] == null){
+            return null;
+        }
+        return table[h].remove(k);
     }
 
     /**
@@ -114,15 +123,31 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
     }
 
     public static void main(String[] args) {
-        ChainHashMap<Integer, String> m = new ChainHashMap<Integer, String>();
-        m.put(1, "One");
-        m.put(10, "Ten");
-        m.put(11, "Eleven");
-        m.put(20, "Twenty");
+//        ChainHashMap<Integer, String> m = new ChainHashMap<Integer, String>();
+//        m.put(1, "One");
+//        m.put(10, "Ten");
+//        m.put(11, "Eleven");
+//        m.put(20, "Twenty");
+//
+//        System.out.println("m: " + m);
+//
+//        m.remove(11);
+//        System.out.println("m: " + m);
 
-        System.out.println("m: " + m);
+        // Q4
+        ChainHashMap<Integer, Integer> m = new ChainHashMap<Integer, Integer>(19);
+        m.put(12, 12);
+        m.put(44, 44);
+        m.put(13, 13);
+        m.put(88, 88);
+        m.put(23, 23);
+        m.put(94, 94);
+        m.put(11, 11);
+        m.put(39, 39);
+        m.put(20, 20);
+        m.put(16, 16);
+        m.put(5, 5);
 
-        m.remove(11);
-        System.out.println("m: " + m);
+        System.out.println(m);
     }
 }

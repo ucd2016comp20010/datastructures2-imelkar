@@ -1,6 +1,7 @@
 package project20280.hashtable;
 
 import project20280.interfaces.AbstractMap;
+import project20280.interfaces.Entry;
 
 import java.util.Random;
 
@@ -35,6 +36,7 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
         scale = rand.nextInt(prime - 1) + 1;
         shift = rand.nextInt(prime);
         createTable();
+//        System.out.println("prime = " + prime + ", capacity = " + capacity + ", scale = " + scale + ", shift = " + shift); // used for Wk9 Q4
     }
 
     /**
@@ -83,6 +85,7 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
      */
     @Override
     public V remove(K key) {
+        --n;
         return bucketRemove(hashValue(key), key);
     }
 
@@ -98,8 +101,8 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
      */
     @Override
     public V put(K key, V value) {
-        // TODO
-        return null;
+        ++n;
+        return bucketPut(hashValue(key), key, value);
     }
 
     // private utilities
@@ -108,15 +111,20 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
      * Hash function applying MAD method to default hash code.
      */
     private int hashValue(K key) {
-        // TODO
-        return 0;
+//        System.out.println("Key: " + key + ", Hash: " + ((int) (( Math.abs(key.hashCode() * scale + shift) % prime ) % capacity))); // used for Q4 Wk9
+        return (int) (( Math.abs(key.hashCode() * scale + shift) % prime ) % capacity);
     }
 
     /**
      * Updates the size of the hash table and rehashes all entries.
      */
     private void resize(int newCap) {
-        // TODO
+        capacity = newCap;
+        Iterable<Entry<K, V>> oldTable = entrySet();
+        createTable();
+        for(Entry<K, V> e: oldTable){
+            put(e.getKey(), e.getValue());
+        }
     }
 
     // protected abstract methods to be implemented by subclasses
